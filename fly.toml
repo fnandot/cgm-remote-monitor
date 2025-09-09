@@ -30,10 +30,12 @@ THEME = "colors"
 TIME_FORMAT = "12"
 
 [experimental]
-auto_rollback = true
+auto_rollback = false
 
 [[services]]
 internal_port = 1_337
+auto_start_machines = false
+auto_stop_machines = false
 processes = [ "app" ]
 protocol = "tcp"
 
@@ -55,3 +57,4 @@ protocol = "tcp"
   grace_period = "1s"
   interval = "15s"
   timeout = "2s"
+
