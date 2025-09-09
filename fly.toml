@@ -1,57 +1,23 @@
-app = "eijeivoeyaine4hoor7on7hi"
-kill_signal = "SIGINT"
-kill_timeout = "5s"
-primary_region = "ams"
+# fly.toml app configuration file generated for eijeivoeyaine4hoor7on7hi on 2025-09-09T09:56:54Z
+#
+# See https://fly.io/docs/reference/configuration/ for information about how to use this file.
+#
 
-[env]
-ALARM_HIGH = "on"
-ALARM_LOW = "on"
-ALARM_TIMEAGO_URGENT = "on"
-ALARM_TIMEAGO_URGENT_MINS = "30"
-ALARM_TIMEAGO_WARN = "on"
-ALARM_TIMEAGO_WARN_MINS = "15"
-ALARM_TYPES = "simple"
-ALARM_URGENT_HIGH = "on"
-ALARM_URGENT_LOW = "on"
-BG_HIGH = "260"
-BG_LOW = "55"
-BG_TARGET_BOTTOM = "70"
-BG_TARGET_TOP = "180"
-BOLUS_RENDER_OVER = "1"
-BRIDGE_PASSWORD = "CHANGE ME!"
-BRIDGE_SERVER = "US"
-BRIDGE_USER_NAME = "CHANGE ME!"
-CUSTOM_TITLE = "Nightscout"
-DISPLAY_UNITS = "mg/dl"
-ENABLE = "careportal basal dbsize rawbg iob maker cob bwp cage iage sage boluscalc pushover treatmentnotify loop pump profile food openaps bage alexa override speech cors"
-NIGHT_MODE = "off"
-SHOW_PLUGINS = "careportal dbsize"
-THEME = "colors"
-TIME_FORMAT = "12"
+app = 'eijeivoeyaine4hoor7on7hi'
+primary_region = 'cdg'
 
-[experimental]
-auto_rollback = true
+[build]
 
-[[services]]
-internal_port = 1_337
-processes = [ "app" ]
-protocol = "tcp"
-
-  [services.concurrency]
-  hard_limit = 25
-  soft_limit = 20
-  type = "connections"
-
-  [[services.ports]]
+[http_service]
+  internal_port = 8080
   force_https = true
-  handlers = [ "http" ]
-  port = 80
+  auto_stop_machines = 'stop'
+  auto_start_machines = true
+  min_machines_running = 0
+  processes = ['app']
 
-  [[services.ports]]
-  handlers = [ "tls", "http" ]
-  port = 443
-
-  [[services.tcp_checks]]
-  grace_period = "1s"
-  interval = "15s"
-  timeout = "2s"
+[[vm]]
+  memory = '1gb'
+  cpu_kind = 'shared'
+  cpus = 1
+  memory_mb = 1024
