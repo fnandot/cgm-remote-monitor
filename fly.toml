@@ -1,7 +1,7 @@
 app = "eijeivoeyaine4hoor7on7hi"
 kill_signal = "SIGINT"
 kill_timeout = "5s"
-primary_region = "mad"
+primary_region = "ams"
 
 [env]
 ALARM_HIGH = "on"
