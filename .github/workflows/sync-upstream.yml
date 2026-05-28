@@ -7,12 +7,13 @@ on:
 
 jobs:
   sync:
-    name: Sync master with nightscout/cgm-remote-monitor
+    name: Rebase master onto nightscout/cgm-remote-monitor
     runs-on: ubuntu-latest
     steps:
       - name: Checkout fork
         uses: actions/checkout@v3
         with:
+          ref: master
           fetch-depth: 0
           token: ${{ secrets.GITHUB_TOKEN }}
 
@@ -27,10 +28,13 @@ jobs:
       - name: Fetch upstream
         run: git fetch upstream
 
-      - name: Merge upstream/master into master
-        run: |
-          git checkout master
-          git merge upstream/master --no-edit
+      - name: Rebase master onto upstream/master
+        run: git rebase upstream/master
+        # Rebase places your commits on top of the latest upstream commits,
+        # keeping a clean linear history without merge commits.
+        # If there are conflicts, the workflow will fail and you must resolve them locally.
 
-      - name: Push updated master to fork
-        run: git push origin master
+      - name: Push rebased master to fork
+        run: git push origin master --force-with-lease
+        # --force-with-lease is safer than --force: it refuses to push
+        # if someone else pushed to master in the meantime.
