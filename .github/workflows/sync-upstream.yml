@@ -1,0 +1,40 @@
+name: Sync Fork with Upstream
+
+on:
+  schedule:
+    - cron: '0 6 * * *'  # Runs daily at 06:00 UTC
+  workflow_dispatch:      # Allows manual trigger from GitHub Actions tab
+
+jobs:
+  sync:
+    name: Rebase master onto nightscout/cgm-remote-monitor
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout fork
+        uses: actions/checkout@v3
+        with:
+          ref: master
+          fetch-depth: 0
+          token: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Configure git
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+
+      - name: Add upstream remote
+        run: git remote add upstream https://github.com/nightscout/cgm-remote-monitor.git
+
+      - name: Fetch upstream
+        run: git fetch upstream
+
+      - name: Rebase master onto upstream/master
+        run: git rebase upstream/master
+        # Rebase places your commits on top of the latest upstream commits,
+        # keeping a clean linear history without merge commits.
+        # If there are conflicts, the workflow will fail and you must resolve them locally.
+
+      - name: Push rebased master to fork
+        run: git push origin master --force-with-lease
+        # --force-with-lease is safer than --force: it refuses to push
+        # if someone else pushed to master in the meantime.
